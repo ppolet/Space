@@ -4,18 +4,19 @@ package space;
 //Бомба
 public class Bomb extends BaseObject{
     
-    public Bomb(double x, double y, double radius) {
-        super(x, y, radius);
+    //10
+    public Bomb(double x, double y) {
+        super(x, y, 1);
     }
 
     @Override
     public void move() {
-        super.move(); //To change body of generated methods, choose Tools | Templates.
+        setY(y + 1);  //10 - бомба падает вниз  - просто увеличиваем y на 1.
     }
 
     @Override
-    public void draw() {
-        super.draw(); //To change body of generated methods, choose Tools | Templates.
+    public void draw(Canvas canvas) {
+        canvas.setPoint(x, y, 'B');
     }
     
     

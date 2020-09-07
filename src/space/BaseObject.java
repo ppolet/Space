@@ -3,9 +3,9 @@ package space;
 
 //--- базовый класс для всех объектов
 public abstract class BaseObject {
-    private double x;
-    private double y;
-    private double radius;
+    protected double x;
+    protected double y;
+    protected double radius;
     private boolean isAlive; //5 - жив объект или уже нет
     
     public BaseObject(double x, double y, double radius){
@@ -43,7 +43,7 @@ public abstract class BaseObject {
         return isAlive;
     }
     
-    public void draw(){
+    public void draw(Canvas canvas){
         
     }
     
@@ -53,6 +53,13 @@ public abstract class BaseObject {
     
     public void die(){
         isAlive = false;
+    }
+    
+    public void checkBorders(double x, double y, double radius){
+        if (x - radius < 0) this.x = radius;
+        if (x + radius > Space.game.getWidth()) this.x = Space.game.getWidth() - radius;
+        if (y - radius < 0) this.y = radius;
+        if (y + radius > Space.game.getHeight()) this.y = Space.game.getHeight() - radius;
     }
     
     //6 - Он будет определять - "пересеклись" объекты или нет. Если пересеклись - возвращать true, если нет - false.

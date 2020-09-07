@@ -17,6 +17,8 @@ public class Space {
     private List<Ufo> ufos = new ArrayList<>();         //список для хранения всех НЛО
     private List<Rocket> rockets = new ArrayList<>();   //список для хранения всех ракет
     private List<Bomb> bombs = new ArrayList<>();       //список для хранения всех бомб
+    
+    public static Space game;   //10
 
     public Space(int width, int height){
         this.width = width;
@@ -38,6 +40,19 @@ public class Space {
     public void setShip(SpaceShip ship){
         this.ship = ship;
     }
+
+    public List<Ufo> getUfos() {
+        return ufos;
+    }
+
+    public List<Rocket> getRockets() {
+        return rockets;
+    }
+
+    public List<Bomb> getBombs() {
+        return bombs;
+    }
+    
     
     public void run(){
         

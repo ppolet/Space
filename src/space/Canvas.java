@@ -34,7 +34,34 @@ public class Canvas {
     
     //8 - копирует переданную ему картинку (матрицу) в матрицу Canvas. И не просто копирует, а начиная с координат x, y
     public void drawMatrix(double x, double y, int[][] matrix, char c){
-        
+        for(int i = 0; i < x; i++){
+            for(int j = 0; j < y; j++){
+                if (matrix[i][j] != 0){
+                    setPoint(x + j, y + i, c);
+                }
+            }
+        }
+    }
+    
+    //9 - Этот метод будет очищать матрицу, чтобы на ней снова можно было рисовать
+    public void clear(){
+        for(int i = 0; i < width; i++){
+            for(int j = 0; j < height; j++){
+                setPoint(j, i, ' ');
+            }
+        }
+    }
+    
+    //9 - Этот метод отрисовывает матрицу на экран.
+    public void print(){
+        for(int i = 0; i < width; i++){
+            for(int j = 0; j < height; j++){
+                System.out.print(matrix[j][i]);
+            }
+            System.out.println();
+        }
+        System.out.println();
+        System.out.println();
     }
     
 }
