@@ -5,7 +5,7 @@ package space;
 public class Ufo extends BaseObject{
     
     //картинка для отрисовки
-    private static int[][] matrix = {
+    private static final int[][] matrix = {
             {0, 0, 0, 0, 0},
             {0, 0, 1, 0, 0},
             {1, 1, 1, 1, 1},

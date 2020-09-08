@@ -66,6 +66,62 @@ public class Space {
         
     }
     
+    //15 - Метод должен возвращать один общий список всех объектов типа BaseObject
+    public List<BaseObject> getAllItems(){
+        List<BaseObject> list = new ArrayList<>();
+        list.addAll(ufos);
+        list.addAll(bombs);
+        list.addAll(rockets);
+        list.add(ship);
+        return list;
+    }
+    
+    //15 - Метод должен двигать все объекты по одному разу
+    public void moveAllItems(){
+        for(BaseObject obj: getAllItems()){
+            obj.move();
+        }
+    }
+    
+    //16 - Если список НЛО пуст - создай один корабль в центре сверху
+    public void createUfo(){
+        if (ufos.isEmpty()){
+            ufos.add(new Ufo(width/2, 0));
+        }
+    }
+    
+    //16 - проверить - не пересеклись между собой какая-нибудь бомба и корабль
+    public void checkBombs(){
+        for(Bomb b: bombs){
+            //пересеклись - корабль и бомба умирают  - die()
+            if(b.isIntersect(ship)){
+                ship.die();
+                b.die();
+            }
+            //Если бомба упала за границу экрана y > height бомба тоже умирает
+            if (b.getY()>=height){
+                b.die();
+            }
+        }
+    }
+    
+    //16 - Надо проверить - не пересеклись между собой какая-нибудь ракета и НЛО
+    public void checkRockets(){
+        for(Rocket r: rockets){
+            for(Ufo u: ufos){
+                // ракета и нло умирают  - die()
+                if(r.isIntersect(u)){
+                    r.die();
+                    u.die();
+                }
+            }
+            // Если ракета улетела за границу экрана y < 0, ракета тоже умирает
+            if(r.getY() < 0){
+                r.die();
+            }
+        }
+    }
+    
     public static void main(String[] args) {
         
     }
