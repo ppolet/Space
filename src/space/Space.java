@@ -6,8 +6,11 @@ package space;
 
 //Космос
 
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Space {
 
@@ -53,17 +56,91 @@ public class Space {
         return bombs;
     }
     
-    
-    public void run(){
-        
+     /**
+     * Основной цикл программы.
+     * Тут происходят все важные действия
+     */
+    public void run() {
+        //Создаем холст для отрисовки.
+        Canvas canvas = new Canvas(width, height);
+
+        //Создаем объект "наблюдатель за клавиатурой" и стартуем его.
+        KeyboardObserver keyboardObserver = new KeyboardObserver();
+        keyboardObserver.start();
+
+        //Игра работает, пока корабль жив
+        while (ship.isAlive()) {
+            //"наблюдатель" содержит события о нажатии клавиш?
+            if (keyboardObserver.hasKeyEvents()) {
+                KeyEvent event = keyboardObserver.getEventFromTop();
+                //Если "стрелка влево" - сдвинуть фигурку влево
+                System.out.print(event.getKeyCode());
+                if (event.getKeyCode() == KeyEvent.VK_LEFT)
+                    ship.moveLeft();
+                    //Если "стрелка вправо" - сдвинуть фигурку вправо
+                else if (event.getKeyCode() == KeyEvent.VK_RIGHT)
+                    ship.moveRight();
+                    //Если "пробел" - запускаем шарик
+                else if (event.getKeyCode() == KeyEvent.VK_SPACE)
+                    ship.fire();
+            }
+
+            //двигаем все объекты игры
+            moveAllItems();
+
+            //проверяем столкновения
+            checkBombs();
+            checkRockets();
+            //удаляем умершие объекты из списков
+            removeDead();
+
+            //Создаем НЛО (1 раз в 10 ходов)
+            createUfo();
+
+            //Отрисовываем все объекты на холст, а холст выводим на экран
+            canvas.clear();
+            draw(canvas);
+            canvas.print();
+
+            //Пауза 300 миллисекунд
+            Space.sleep(300);
+        }
+
+        //Выводим сообщение "Game Over"
+        System.out.println("Game Over!");
+    }
+   
+     
+    public void draw(Canvas canvas){
+        //draw game
+        for (int i = 0; i < width + 2; i++) {
+            for (int j = 0; j < height + 2; j++) {
+                canvas.setPoint(i, j, '.');
+            }
+        }
+
+        for (int i = 0; i < width + 2; i++) {
+            canvas.setPoint(i, 0, '-');
+            canvas.setPoint(i, height + 1, '-');
+        }
+
+        for (int i = 0; i < height + 2; i++) {
+            canvas.setPoint(0, i, '|');
+            canvas.setPoint(width + 1, i, '|');
+        }
+
+        for (BaseObject object : getAllItems()) {
+            object.draw(canvas);
+        }
     }
     
-    public void draw(){
-        
-    }
-    
-    public void sleep(int ms){
-        
+    public static void sleep(int ms){
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Space.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Exception in void sleep: " + ex.getMessage());
+        }
     }
     
     //15 - Метод должен возвращать один общий список всех объектов типа BaseObject
@@ -86,6 +163,8 @@ public class Space {
     //16 - Если список НЛО пуст - создай один корабль в центре сверху
     public void createUfo(){
         if (ufos.isEmpty()){
+            ufos.add(new Ufo(width/2, 0));
+        } else if (Math.random()<0.1){
             ufos.add(new Ufo(width/2, 0));
         }
     }
@@ -122,8 +201,29 @@ public class Space {
         }
     }
     
+    //16 - В это методе удали из списков ufos, rockets, bombs все мертвые объекты (isAlive() == false)
+    public void removeDead(){
+        for(int i = 0; i < ufos.size(); i++){
+            if (!ufos.get(i).isAlive()){
+                ufos.remove(i);
+            }
+        }
+        for(int i = 0; i < rockets.size(); i++){
+            if (!rockets.get(i).isAlive()){
+                rockets.remove(i);
+            }
+        }
+        for(int i = 0; i < bombs.size(); i++){
+            if (!bombs.get(i).isAlive()){
+                bombs.remove(i);
+            }
+        }
+    }
+    
     public static void main(String[] args) {
-        
+        game = new Space(20, 20);
+        game.setShip(new SpaceShip(10, 18));
+        game.run();
     }
     
 }

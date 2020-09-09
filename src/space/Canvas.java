@@ -7,8 +7,10 @@ public class Canvas {
     private int height;
     private char[][] matrix;
 
-    public Canvas(char[][] matrix) {
-        this.matrix = matrix;
+    public Canvas(int width, int height) {
+        this.width = width;
+        this.height = height;
+        matrix = new char[height + 2][width + 2];
     }
 
     public int getWidth() {
@@ -34,8 +36,8 @@ public class Canvas {
     
     //8 - копирует переданную ему картинку (матрицу) в матрицу Canvas. И не просто копирует, а начиная с координат x, y
     public void drawMatrix(double x, double y, int[][] matrix, char c){
-        for(int i = 0; i < x; i++){
-            for(int j = 0; j < y; j++){
+        for(int i = 0; i < matrix.length; i++){
+            for(int j = 0; j < matrix[i].length; j++){
                 if (matrix[i][j] != 0){
                     setPoint(x + j, y + i, c);
                 }
@@ -62,6 +64,7 @@ public class Canvas {
         }
         System.out.println();
         System.out.println();
+        System.out.println("Ufos: " + Space.game.getUfos().size());
     }
     
 }
